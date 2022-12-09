@@ -1,3 +1,6 @@
+from typing import List, Dict, Type
+
+
 class InfoMessage:
     """Информационное сообщение о тренировке."""
 
@@ -52,14 +55,14 @@ class Training:
         """Получить количество затраченных калорий."""
         pass
 
-    def show_training_info(self) -> InfoMessage:
+    def show_training_info(self) -> Type[InfoMessage]:
         """Вернуть информационное сообщение о выполненной тренировке."""
         distance = self.get_distance()
         mean_speed = self.get_mean_speed()
         spent_calories = self.get_spent_calories()
         training_type = self.__class__.__name__
 
-        message: InfoMessage = InfoMessage(
+        message: Type[InfoMessage] = InfoMessage(
             training_type,
             self.duration,
             distance,
@@ -141,22 +144,22 @@ class Swimming(Training):
         return calories
 
 
-def read_package(workout_type: str, data: list[int]) -> Training:
+def read_package(workout_type: str, data: List[int]) -> Type[Training]:
     """Прочитать данные полученные от датчиков."""
-    workouts: dict[str, Training] = {
+    workouts: Dict[str, Type[Training]] = {
         'SWM': Swimming,
         'RUN': Running,
         'WLK': SportsWalking,
     }
 
-    training: Training = workouts[workout_type](*data)
+    training: Type[Training] = workouts[workout_type](*data)
 
     return training
 
 
-def main(training: Training) -> None:
+def main(training: Type[Training]) -> None:
     """Главная функция."""
-    info: InfoMessage = training.show_training_info()
+    info: Type[InfoMessage] = training.show_training_info()
     message: str = info.get_message()
     print(message)
 
